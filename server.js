@@ -27,9 +27,7 @@ incoming.on('connected', function() {
       }
       console.log("[API.Bots.index return] Firing up bot! ID:", BOT_ID);
       (function meetingTimeCheck() {
-        console.log((new Date()).getHours());
-        var dt = new Date();
-        if (dt.getDay() == 3 && dt.getHours() == 20) {
+        if ((new Date()).getDay() == 3 && (new Date()).getHours() == 20) {
           API.Bots.post(ACCESS_TOKEN, BOT_ID, meetingTime[0], {},
             function(err,res) {
               if (err) {
