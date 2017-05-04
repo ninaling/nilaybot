@@ -1,8 +1,13 @@
 require('dotenv').config();
 var async = require('async');
+var http = require("http");
+var server = http.createServer(function(request, response) {});
+
+server.listen(process.env.PORT || 8080);
 
 var GroupMe = require('groupme');
 var API = GroupMe.Stateless;
+
 var ACCESS_TOKEN = process.env.ACCESS_TOKEN;
 var BOT_ID = null;
 var USER_ID = process.env.USER_ID;
