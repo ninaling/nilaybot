@@ -79,6 +79,28 @@ var handleIncomingMessage = function(msg) {
   }
 }
 
+setInterval(function() {
+  var dt = new Date();
+  if (dt.getDay() == 3 && dt.getHours() == 20 && dt.getMinutes() == 0) {
+    API.Bots.post(ACCESS_TOKEN, BOT_ID, meetingTime[0], {},
+      function(err,res) {
+        if (err) {
+          console.log("[API.Bots.post] Reply Message Error!");
+        } else {
+          console.log("[API.Bots.post] Reply Message Sent!");
+          API.Bots.post(ACCESS_TOKEN, BOT_ID, meetingTime[1], {},
+            function(err,res) {
+              if (err) {
+                console.log("[API.Bots.post] Reply Message Error!");
+              } else {
+                console.log("[API.Bots.post] Reply Message Sent!");
+              }
+            });
+        }
+      });
+  }
+}, 1000 * 60);
+
 var stuff = "Hello, you have reached the official SEP nilaybot. Help yourself to some official stuff:" + '\n'
   + "Constitution: " + process.env.CONSTITUTION + '\n'
   + "Bylaws: " + process.env.BYLAWS  + '\n'
@@ -96,3 +118,5 @@ var hello = [
   "CAVA 4 LYFE",
   "STOP SLEEPING NINA"
 ];
+
+var meetingTime = ["TIME FOR MEETING", "SHUT THE FUCK UP AND SIT THE FUCK DOWN"];
