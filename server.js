@@ -1,0 +1,68 @@
+require('dotenv').config();
+var async = require('async');
+
+var GroupMe = require('groupme');
+var API = GroupMe.Stateless;
+var ACCESS_TOKEN = process.env.ACCESS_TOKEN;
+var BOT_ID = null;
+var USER_ID = process.env.USER_ID;
+var BOT_NAME = process.env.BOT_NAME;
+
+var incoming = new GroupMe.IncomingStream(ACCESS_TOKEN, USER_ID, null);
+
+incoming.on('connected', function() {
+  console.log("[IncomingStream 'connected']");
+
+  API.Bots.index(ACCESS_TOKEN, function(err,ret) {
+    if (!err) {
+      for (var i = 0; i < ret.length; i++) {
+        if (ret[i].name == BOT_NAME) {
+          BOT_ID = ret[i].bot_id;
+        }
+      }
+      console.log("[API.Bots.index return] Firing up bot! ID:", BOT_ID);
+    }
+  });
+});
+
+incoming.on('message', function(msg) {
+  if (msg["data"]
+    && msg["data"]["subject"]
+    && msg["data"]["subject"]["text"]) {
+
+    if (msg["data"]["subject"]["name"] != BOT_NAME) {
+      console.log("[IncomingStream 'message'] Message Received!");
+      handleIncomingMessage(msg);
+    }
+  }
+});
+
+incoming.connect();
+
+var handleIncomingMessage = function(msg) {
+  console.log(msg["data"]);
+
+  var words;
+  if ( words = msg["data"]["subject"]["text"].split(' ')) {
+    if (words[0] == "nilaybot" && words[1] == "stuff") {
+      API.Bots.post(
+        ACCESS_TOKEN,
+        BOT_ID,
+        stuff,
+        {},
+        function(err,res) {
+          if (err) {
+            console.log("[API.Bots.post] Reply Message Error!");
+          } else {
+            console.log("[API.Bots.post] Reply Message Sent!");
+          }
+        });
+    }
+  }
+}
+
+var stuff = "Hello, you have reached the official SEP nilaybot. Help yourself to some official stuff:" + '\n'
+  + "Constitution: " + process.env.CONSTITUTION + '\n'
+  + "Bylaws: " + process.env.BYLAWS  + '\n'
+  + "Anonymous Feedback Form: " + process.env.FEEDBACK  + '\n'
+  + "Peace out";
