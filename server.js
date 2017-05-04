@@ -43,20 +43,38 @@ var handleIncomingMessage = function(msg) {
   console.log(msg["data"]);
 
   var words;
-  if ( words = msg["data"]["subject"]["text"].split(' ')) {
-    if (words[0] == "nilaybot" && words[1] == "stuff") {
-      API.Bots.post(
-        ACCESS_TOKEN,
-        BOT_ID,
-        stuff,
-        {},
-        function(err,res) {
-          if (err) {
-            console.log("[API.Bots.post] Reply Message Error!");
-          } else {
-            console.log("[API.Bots.post] Reply Message Sent!");
-          }
-        });
+  if ( words = msg["data"]["subject"]["text"].split(' ') ) {
+    if (words[0].toLowerCase() == "nilaybot") {
+      if (words[1].toLowerCase() == "stuff") {
+        API.Bots.post(ACCESS_TOKEN, BOT_ID, stuff, {},
+          function(err,res) {
+            if (err) {
+              console.log("[API.Bots.post] Reply Message Error!");
+            } else {
+              console.log("[API.Bots.post] Reply Message Sent!");
+            }
+          });
+      }
+      else if (words[1].toLowerCase() == "help") {
+        API.Bots.post(ACCESS_TOKEN, BOT_ID, help, {},
+          function(err,res) {
+            if (err) {
+              console.log("[API.Bots.post] Reply Message Error!");
+            } else {
+              console.log("[API.Bots.post] Reply Message Sent!");
+            }
+          });
+      }
+      else if (words[1].toLowerCase() == "hello") {
+        API.Bots.post(ACCESS_TOKEN, BOT_ID, hello[Math.floor(Math.random() * hello.length)], {},
+          function(err,res) {
+            if (err) {
+              console.log("[API.Bots.post] Reply Message Error!");
+            } else {
+              console.log("[API.Bots.post] Reply Message Sent!");
+            }
+          });
+      }
     }
   }
 }
@@ -66,3 +84,15 @@ var stuff = "Hello, you have reached the official SEP nilaybot. Help yourself to
   + "Bylaws: " + process.env.BYLAWS  + '\n'
   + "Anonymous Feedback Form: " + process.env.FEEDBACK  + '\n'
   + "Peace out";
+
+var help = "Here are the commands I currently support:" + '\n'
+  + "nilaybot hello - ;)" + '\n'
+  + "nilaybot help - displays a list of supported commands" + '\n'
+  + "nilaybot stuff - displays a list of links to all official documents and an anonymous feedback form";
+
+var hello = [
+  "SHUT THE FUCK UP",
+  "SIT THE FUCK DOWN",
+  "CAVA 4 LYFE",
+  "STOP SLEEPING NINA"
+];
